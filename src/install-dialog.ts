@@ -197,7 +197,10 @@ export class EwtInstallDialog extends LitElement {
                 <ew-list-item
                   type="button"
                   @click=${() => {
-                    if (this._isSameFirmware) {
+                    if (this._manifest.new_install_prevent_erase) {
+                      // If prevent_erase is set, always install without erasing
+                      this._startInstall(false);
+                    } else if (this._isSameFirmware) {
                       this._startInstall(false);
                     } else if (this._manifest.new_install_prompt_erase) {
                       this._state = "ASK_ERASE";
@@ -286,7 +289,7 @@ export class EwtInstallDialog extends LitElement {
                 </ew-list-item>
               `
             : ""}
-          ${this._isSameVersion
+          ${this._isSameVersion && !this._manifest.new_install_prevent_erase
             ? html`
                 <ew-list-item
                   type="button"
@@ -315,7 +318,10 @@ export class EwtInstallDialog extends LitElement {
           <ew-list-item
             type="button"
             @click=${() => {
-              if (this._manifest.new_install_prompt_erase) {
+              if (this._manifest.new_install_prevent_erase) {
+                // If prevent_erase is set, always install without erasing
+                this._startInstall(false);
+              } else if (this._manifest.new_install_prompt_erase) {
                 this._state = "ASK_ERASE";
               } else {
                 // Default is to erase a device that does not support Improv Serial
