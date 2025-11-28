@@ -1,8 +1,16 @@
-# ESP Web Tools
+# ESP Web Tools (@zjwhitehead fork)
 
 Allow flashing ESPHome or other ESP-based firmwares via the browser. Will automatically detect the board type and select a supported firmware. [See website for full documentation.](https://esphome.github.io/esp-web-tools/)
 
+## Getting the beta build
+
+- npm: `npm install @zjwhitehead/esp-web-tools@10.2.0-b1`
+- CDN: `https://unpkg.com/@zjwhitehead/esp-web-tools@10.2.0-b1/dist/web/install-button.js?module`
+
+Then import or reference the bundle and use the custom element as usual:
+
 ```html
+<script type="module" src="https://unpkg.com/@zjwhitehead/esp-web-tools@10.2.0-b1/dist/web/install-button.js?module"></script>
 <esp-web-install-button
   manifest="firmware_esphome/manifest.json"
 ></esp-web-install-button>

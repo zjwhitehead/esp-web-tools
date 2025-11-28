@@ -522,6 +522,15 @@ esptool --chip esp32 merge_bin \
         firmware does not match the name specififed in the manifest.
       </p>
       <p>
+        If you want to completely prevent users from erasing their device during
+        installation, set the optional manifest key
+        <code>new_install_prevent_erase</code> to <code>true</code>. When this
+        option is enabled, installations will always proceed without erasing,
+        the erase prompt dialog will not be shown, and the "Erase User Data"
+        menu item will be hidden from the dashboard. This is useful when you
+        want to ensure users never accidentally erase their saved settings.
+      </p>
+      <p>
         When a firmware is first installed on a device, it might need to do some
         time consuming tasks like initializing the file system. By default ESP
         Web Tools will wait 10 seconds to receive an Improv Serial response to
