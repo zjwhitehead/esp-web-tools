@@ -39,6 +39,9 @@ const config = {
 if (process.env.NODE_ENV === "production") {
   config.plugins.push(
     terser({
+      // Run minification in a single worker to avoid worker pool issues in
+      // restricted environments.
+      maxWorkers: 1,
       ecma: 2019,
       toplevel: true,
       format: {
