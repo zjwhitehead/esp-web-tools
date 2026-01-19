@@ -48,6 +48,11 @@ console.log(
 const ERROR_ICON = "⚠️";
 const OK_ICON = "🎉";
 
+// Flash duration constants
+const FLASH_DURATION_ESP8266_DEFAULT = 60; // seconds
+const FLASH_DURATION_DEFAULT = 120; // seconds
+const FLASH_DURATION_DISPLAY_THRESHOLD = 90; // seconds, threshold for showing minutes vs seconds
+
 export class EwtInstallDialog extends LitElement {
   public port!: SerialPort;
 
@@ -655,10 +660,7 @@ export class EwtInstallDialog extends LitElement {
         html`
           ${undeterminateLabel ? html`${undeterminateLabel}<br />` : ""}
           <br />
-          This will take
-          ${this._installState.chipFamily === "ESP8266"
-            ? "a minute"
-            : "2 minutes"}.<br />
+          This will take ${this._formatFlashDuration(this._getFlashDuration())}.<br />
           Keep this page visible to prevent slow down
         `,
         percentage,
@@ -1018,6 +1020,36 @@ export class EwtInstallDialog extends LitElement {
 
   private _preventDefault(ev: Event) {
     ev.preventDefault();
+  }
+
+  /**
+   * Format flash duration for display.
+   * Shows seconds for durations under FLASH_DURATION_DISPLAY_THRESHOLD, otherwise displays in minutes.
+   */
+  private _formatFlashDuration(seconds: number): string {
+    if (seconds < FLASH_DURATION_DISPLAY_THRESHOLD) {
+      return seconds === 1 ? "a second" : `${seconds} seconds`;
+    }
+    const minutes = Math.round(seconds / 60);
+    return minutes === 1 ? "a minute" : `${minutes} minutes`;
+  }
+
+  /**
+   * Get the expected flash duration in seconds for the current installation.
+   */
+  private _getFlashDuration(): number {
+    // Use manifest value if specified and valid
+    if (
+      this._manifest.flash_duration !== undefined &&
+      this._manifest.flash_duration > 0
+    ) {
+      return this._manifest.flash_duration;
+    }
+    // Default based on chip family
+    if (this._installState?.chipFamily === "ESP8266") {
+      return FLASH_DURATION_ESP8266_DEFAULT;
+    }
+    return FLASH_DURATION_DEFAULT;
   }
 
   static styles = [

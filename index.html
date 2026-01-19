@@ -495,6 +495,7 @@ esptool --chip esp32 merge_bin \
   "home_assistant_domain": "esphome",
   "funding_url": "https://esphome.io/guides/supporters.html",
   "new_install_prompt_erase": false,
+  "flash_duration": 180,
   "builds": [
     {
       "chipFamily": "ESP32",
@@ -548,6 +549,19 @@ esptool --chip esp32 merge_bin \
         setting the optional manifest key
         <code>new_install_improv_wait_time</code> to the number of seconds to
         wait. Set to <code>0</code> to disable Improv Serial detection.
+      </p>
+      <p>
+        During firmware installation, ESP Web Tools displays an estimated
+        duration message to inform users how long the process will take. By
+        default, this is 60 seconds for ESP8266 devices and 120 seconds for
+        other ESP devices. If your hardware requires a different duration, you
+        can customize this by setting the optional manifest key
+        <code>flash_duration</code> to the number of seconds. The duration will
+        be displayed in seconds for values under 90 seconds, or in minutes
+        (rounded) for longer durations. For example,
+        <code>"flash_duration": 30</code> will display "This will take 30
+        seconds", while <code>"flash_duration": 180</code> will display "This
+        will take 3 minutes".
       </p>
       <p>
         If your product accepts donations you can add
