@@ -48,6 +48,11 @@ console.log(
 const ERROR_ICON = "⚠️";
 const OK_ICON = "🎉";
 
+// Flash duration constants
+const FLASH_DURATION_ESP8266_DEFAULT = 60; // seconds
+const FLASH_DURATION_DEFAULT = 120; // seconds
+const FLASH_DURATION_DISPLAY_THRESHOLD = 90; // seconds, threshold for showing minutes vs seconds
+
 export class EwtInstallDialog extends LitElement {
   public port!: SerialPort;
 
@@ -1019,10 +1024,10 @@ export class EwtInstallDialog extends LitElement {
 
   /**
    * Format flash duration for display.
-   * Shows seconds for durations under 90s, otherwise displays in minutes.
+   * Shows seconds for durations under FLASH_DURATION_DISPLAY_THRESHOLD, otherwise displays in minutes.
    */
   private _formatFlashDuration(seconds: number): string {
-    if (seconds < 90) {
+    if (seconds < FLASH_DURATION_DISPLAY_THRESHOLD) {
       return seconds === 1 ? "a second" : `${seconds} seconds`;
     }
     const minutes = Math.round(seconds / 60);
@@ -1038,7 +1043,9 @@ export class EwtInstallDialog extends LitElement {
       return this._manifest.flash_duration;
     }
     // Default based on chip family
-    return this._installState?.chipFamily === "ESP8266" ? 60 : 120;
+    return this._installState?.chipFamily === "ESP8266" 
+      ? FLASH_DURATION_ESP8266_DEFAULT 
+      : FLASH_DURATION_DEFAULT;
   }
 
   static styles = [
