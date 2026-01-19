@@ -1,6 +1,6 @@
 {
   "name": "@zjwhitehead/esp-web-tools",
-  "version": "10.2.0-b1",
+  "version": "10.2.0-b2",
   "description": "Web tools for ESP devices",
   "main": "dist/install-button.js",
   "repository": "https://github.com/zwhitehead/esp-web-tools",
