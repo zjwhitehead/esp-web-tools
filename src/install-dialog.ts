@@ -1038,14 +1038,18 @@ export class EwtInstallDialog extends LitElement {
    * Get the expected flash duration in seconds for the current installation.
    */
   private _getFlashDuration(): number {
-    // Use manifest value if specified
-    if (this._manifest.flash_duration !== undefined) {
+    // Use manifest value if specified and valid
+    if (
+      this._manifest.flash_duration !== undefined &&
+      this._manifest.flash_duration > 0
+    ) {
       return this._manifest.flash_duration;
     }
     // Default based on chip family
-    return this._installState?.chipFamily === "ESP8266" 
-      ? FLASH_DURATION_ESP8266_DEFAULT 
-      : FLASH_DURATION_DEFAULT;
+    if (this._installState?.chipFamily === "ESP8266") {
+      return FLASH_DURATION_ESP8266_DEFAULT;
+    }
+    return FLASH_DURATION_DEFAULT;
   }
 
   static styles = [
