@@ -32,6 +32,8 @@ export interface Manifest {
   new_install_prevent_erase?: boolean;
   /* Time to wait to detect Improv Wi-Fi. Set to 0 to disable. */
   new_install_improv_wait_time?: number;
+  /* Expected flash duration in seconds. If not specified, defaults based on chip family. */
+  flash_duration?: number;
   builds: Build[];
 }
 

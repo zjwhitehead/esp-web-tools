@@ -655,10 +655,7 @@ export class EwtInstallDialog extends LitElement {
         html`
           ${undeterminateLabel ? html`${undeterminateLabel}<br />` : ""}
           <br />
-          This will take
-          ${this._installState.chipFamily === "ESP8266"
-            ? "a minute"
-            : "2 minutes"}.<br />
+          This will take ${this._formatFlashDuration(this._getFlashDuration())}.<br />
           Keep this page visible to prevent slow down
         `,
         percentage,
@@ -1018,6 +1015,30 @@ export class EwtInstallDialog extends LitElement {
 
   private _preventDefault(ev: Event) {
     ev.preventDefault();
+  }
+
+  /**
+   * Format flash duration for display.
+   * Shows seconds for durations under 90s, otherwise displays in minutes.
+   */
+  private _formatFlashDuration(seconds: number): string {
+    if (seconds < 90) {
+      return seconds === 1 ? "a second" : `${seconds} seconds`;
+    }
+    const minutes = Math.round(seconds / 60);
+    return minutes === 1 ? "a minute" : `${minutes} minutes`;
+  }
+
+  /**
+   * Get the expected flash duration in seconds for the current installation.
+   */
+  private _getFlashDuration(): number {
+    // Use manifest value if specified
+    if (this._manifest.flash_duration !== undefined) {
+      return this._manifest.flash_duration;
+    }
+    // Default based on chip family
+    return this._installState?.chipFamily === "ESP8266" ? 60 : 120;
   }
 
   static styles = [
