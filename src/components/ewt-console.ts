@@ -92,8 +92,8 @@ export class EwtConsole extends HTMLElement {
   private async _connect(abortSignal: AbortSignal) {
     this.logger.debug("Starting console read loop");
     try {
-      await this.port
-        .readable!.pipeThrough(new TextDecoderStream(), {
+      await (this.port.readable as ReadableStream<BufferSource>)
+        .pipeThrough(new TextDecoderStream(), {
           signal: abortSignal,
         })
         .pipeThrough(new TransformStream(new LineBreakTransformer()))
