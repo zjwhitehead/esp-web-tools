@@ -16,9 +16,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install jq
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: npm ci
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
       - run: npm publish
